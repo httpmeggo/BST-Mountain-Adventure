@@ -1,3 +1,13 @@
+/**
+ * This class represents the mountain that this 
+ * program is based on. It stores data items of 
+ * the type RestStop, created in the RestStop class.
+ * This class implements a binary search tree.
+ * 
+ * @author Megan Nicius
+ * 
+ * @version 24 April 2021
+ */
 package project5;
 
 import java.util.Comparator;
@@ -39,7 +49,7 @@ public class BSTMountain<RestStop extends Comparable<RestStop>> {
 	 * @return true if this tree did not already contain the specified element 
 	 * @throws NullPointerException if the specified element is null  
 	 */
-	public boolean add ( RestStop data ) { 
+	public boolean add (RestStop data) { 
 		added = false; 
 		if (data == null) return added; 
 		//replace root with the reference to the tree after the new 
