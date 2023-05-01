@@ -14,37 +14,86 @@ package project5;
 
 import java.util.ArrayList;
 
-public class RestStop implements Comparable {
+public class RestStop implements Comparable<RestStop>{
+
+	private String label; //represents rest stop label
+	private ArrayList supplies; //array list that holds
+	//supplies found at rest stop
+	private ArrayList obstacles; //array list that holds
+	//obstacles found at rest stop
 	
-	public boolean checkSuppliesAndObstacles(String item) {
-		//from int 1 (so after label)
-			//if item is food or raft or axe, store in supply
-			//array list
-			//else if item is fallen tree or river, store in
-			//obstacle array list
-			//else if item is not "\n", error: invalid item
-		boolean check = false;	
-		if(compareTo(item) == 1)
-			//System.out.println("Obstacles and supplies are okay.");
-			check = true;
-		else
-			//System.err.println("HMM SOMETHINGS NOT RIGHT");
-			check = false;
-		return check;
+	/**
+	 * Default constructor for this class
+	 */
+	public RestStop() {
+		this.label = label;
+		this.supplies = supplies;
+		this.obstacles = obstacles;
+	}
+
+
+	/**
+	 * This method allows for other classes
+	 * to access the label.
+	 * @return label
+	 */
+	public String getLabel() {
+		return label;
 	}
 	
+	/**
+	 * This method allows for other classes
+	 * to set the label.
+	 * @param label
+	 */
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	
+	/**
+	 * This method allows for other classes
+	 * to access the list of supplies.
+	 * @return supplies
+	 */
+	public ArrayList getSupplies() {
+		return supplies;
+	}
+	
+	/**
+	 * This method allows for other classes to
+	 * set the list of supplies
+	 * @param supplies
+	 */
+	public void setSupplies(ArrayList supplies) {
+		this.supplies = supplies;
+	}
+	
+	/**
+	 * This method allows for other classes
+	 * to access the list of obstacles.
+	 * @return obstacles
+	 */
+	public ArrayList getObstacles() {
+		return obstacles;
+	}
+	
+	/**
+	 * This method allows for other classes to
+	 * set the list of obstacles.
+	 * @param obstacles
+	 */
+	public void setObstacles(ArrayList obstacles) {
+		this.obstacles = obstacles;
+	}
 
+
+	/**
+	 * This method sorts rest stops according to label.
+	 */
 	@Override
-	public int compareTo(Object o) {
-		// TODO Auto-generated method stub
-		ArrayList suppliesAndObstacles = new ArrayList();
-		if(o == "food" || o == "raft" || o == "axe" 
-				|| o == "fallen river" || o == "river") {
-			suppliesAndObstacles.add(o);
-			return 1;
-		}
-		else
-			return 0;
+	public int compareTo(RestStop o) {
+		return this.getLabel().compareTo(o.getLabel());
 	}
 
+	
 }

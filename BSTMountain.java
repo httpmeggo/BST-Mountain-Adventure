@@ -12,244 +12,189 @@ package project5;
 
 import java.util.Comparator;
 
-public class BSTMountain<RestStop extends Comparable<RestStop>> {
-	
-	private BSTNode root;   //reference to the root node of the tree 
-	private Comparator<RestStop> comparator;   //comparator object to overwrite the 
-	//natural ordering of the elements 
-
-
-
-	private boolean found;  //helper variable used by the remove methods
-	private boolean added ; //helper variable used by the add method 
-
-
+public class BSTMountain {
 
 	/**
-	 * Constructs a new, empty tree, sorted according to the natural ordering of its elements.
+	 * This private class is used to create nodes of type RestStop that
+	 * are used in a binary search tree implementation.
+	 * @author Megan Nicius
+	 *
+	 * @param <RestStop>
 	 */
-	public BSTMountain () {
-		root = null; 
+	private class BSTNode<RestStop>{
+		
+		private RestStop data;
+		private BSTNode<RestStop> left;
+		private BSTNode<RestStop> right;
+		
+		/**
+		 * Constructs a BSTNode with data of type RestStop
+		 * @param data contains information about the RestStop
+		 */
+		private BSTNode(RestStop data) {
+			data = data;
+			left = null;
+			right = null;
+		}
+		
+		/**
+		 * Default constructor
+		 */
+		private BSTNode() {
+			
+		}
+
+		/**
+		 * Lexicographically compares data of type RestStop according to natural sorting of data
+		 * @param rs
+		 * @return 0 if data are equal, a value less than 0 if data is less than
+		 * rs.data, and a value greater than 0 if data is greater than rs.data
+		 */
+		public int compareTo(BSTNode<RestStop> rs) {
+			return ((BSTNode<RestStop>) data).compareTo((BSTNode<RestStop>) rs.data);
+		}
+	}
+	
+	//private variable that is used to reference the root node
+	private BSTNode<RestStop> root;
+	//private comparator variable that is used to create a new order for
+	//the nodes of the BST
+	private Comparator<RestStop> comparator;
+
+	/**
+	 * This constructor creates a new BST that is sorted by its
+	 * natural order.
+	 */
+	public BSTMountain() { 
 		comparator = null; 
+		root = null;
+	}
+	
+	/**
+	 * This constructor creates a new BST that is sorted based
+	 * on the comparator.
+	 */
+    public BSTMountain(Comparator<RestStop> comparator) {
+        this.comparator = comparator;
+    }
+    
+    /**
+     * This method allows for the root to be accessed outside of this class.
+     * @return root node of BST
+     */
+	public BSTNode getRoot() {
+		return root;
 	}
 
 	/**
-	 * Constructs a new, empty tree, sorted according to the specified comparator.
+	 * This method allows for the root to be set outside of this class.
+	 * @param root new root node that root will be set to.
 	 */
-	public BSTMountain(Comparator<RestStop> comparator) {
+	public void setRoot(BSTNode root) {
+		this.root = root;
+	}
+
+	/**
+	 * This method allows for the comparator to be accessed outside of
+	 * this class.
+	 * @return comparator of type Comparator<RestStop>
+	 */
+	public Comparator<RestStop> getComparator() {
+		return comparator;
+	}
+
+	/**
+	 * This method allows for the comparator to be set outside of
+	 * this class.
+	 * @param comparator another comparator of type Comparator<RestStop>
+	 */
+	public void setComparator(Comparator<RestStop> comparator) {
 		this.comparator = comparator;
 	}
-
-
+	
 	/**
-	 * Adds the specified element to this tree if it is not already present. 
-	 * If this tree already contains the element, the call leaves the 
-	 * tree unchanged and returns false.
-	 * @param data element to be added to this tree 
-	 * @return true if this tree did not already contain the specified element 
-	 * @throws NullPointerException if the specified element is null  
+	 * This method creates a new node using data of type RestStop.
+	 * @param here data of type RestStop containing information about the
+	 * specific rest stop that the node represents.
+	 * @return myStop a newly created node that represents the current rest stop.
 	 */
-	public boolean add (RestStop data) { 
-		added = false; 
-		if (data == null) return added; 
-		//replace root with the reference to the tree after the new 
-		//value is added
-		root = add (data, root);
-		return added; 
+	public BSTNode<RestStop> newNode(RestStop here){
+		//create new BSTNode object
+		BSTNode<RestStop> myStop = new BSTNode();
+		//set myStop data and child node pointers
+		myStop.data = here;
+		myStop.left = null;
+		myStop.right = null;
+		return myStop;
 	}
-	/*
-	 * Actual recursive implementation of add. 
-	 *
-	 * This function returns a reference to the subtree in which 
-	 * the new value was added. 
-	 *
-	 * @param data element to be added to this tree 
-	 * @param node node at which the recursive call is made 
-	 */
-	private BSTNode add (RestStop data, BSTNode node ) {
-		if (node == null) {
-			added = true; 
-			return new BSTNode(data); 
-		}
-		//decide how comparisons should be done 
-		int comp = 0 ;
-		if (comparator == null ) //use natural ordering of the elements 
-			comp = node.data.compareTo(data); 
-		else                     //use the comparator 
-			comp = comparator.compare(node.data, data ) ;
-
-		//find the location to add the new value 
-		if (comp > 0 ) { //add to the left subtree 
-			node.left = add(data, node.left); 
-		}
-		else if (comp < 0 ) { //add to the right subtree
-			node.right = add(data, node.right); 
-		}
-		else { //duplicate found, do not add 
-			added = false; 
-			return node; 
-		}
-		return node; 
-	}
-
-
+	
 	/**
-	 * Removes the specified element from this tree if it is present. 
-	 * Returns true if this tree contained the element (or equivalently, 
-	 * if this tree changed as a result of the call). 
-	 * (This tree will not contain the element once the call returns.)
-	 * @param target object to be removed from this tree, if present
-	 * @return true if this set contained the specified element 
-	 * @throws NullPointerException if the specified element is null  
+	 * This method creates a new node using data of type RestStop. It invokes
+	 * the method newNode() to create a new node.
+	 * Notice: this method does not entirely work as intended.
+	 * @param node the node representing the current rest stop
+	 * @param stop the data of the current rest stop
+	 * @return node node that is newly added to BST
 	 */
-	public boolean remove(RestStop target)
-	{
-		//replace root with a reference to the tree after target was removed 
-		root = recRemove(target, root);
-
-		return found;
-	}
-
-
-	/*
-	 * Actual recursive implementation of remove method: find the node to remove.
-	 *
-	 * This function recursively finds and eventually removes the node with the target element 
-	 * and returns the reference to the modified tree to the caller. 
-	 * 
-	 * @param target object to be removed from this tree, if present
-	 * @param node node at which the recursive call is made 
-	 */
-	private BSTNode recRemove(RestStop target, BSTNode node)
-	{
-		if (node == null)  { //value not found 
-			found = false;
-			return node; 
+	public BSTNode<RestStop> insert(BSTNode node, RestStop stop) {
+		
+		//check if given node is null
+		if(node == null) {
+			return newNode(stop);
 		}
-
-		//decide how comparisons should be done 
-		int comp = 0 ;
-		if (comparator == null ) //use natural ordering of the elements 
-			comp = target.compareTo(node.data); 
-		else                     //use the comparator 
-			comp = comparator.compare(target, node.data ) ;
-
-
-		if (comp < 0)       // target might be in a left subtree 
-			node.left = recRemove(target, node.left);
-		else if (comp > 0)  // target might be in a right subtree 
-			node.right = recRemove(target, node.right );
-		else {          // target found, now remove it 
-			node = removeNode(node);
-			found = true;
+		//use compareTo to assign left and right child nodes
+		if(node.compareTo(newNode(stop)) < 0) {
+			node.left = insert(node.left, stop);
+		}
+		else if(node.compareTo(newNode(stop)) > 0) {
+			node.right = insert(node.right, stop);
 		}
 		return node;
 	}
-
-	/*
-	 * Actual recursive implementation of remove method: perform the removal.
-	 *
-	 * @param target the item to be removed from this tree
-	 * @return a reference to the node itself, or to the modified subtree
+	
+	/**
+	 * This method is used to convert the binary search tree to a String
+	 * which can then be displayed.
+	 * @return buff.toString() call to recursive helper method
+	 * @author Joanna Klukowska
 	 */
-	private BSTNode removeNode(BSTNode node)
-	{
-		RestStop data;
-		if (node.left == null)   //handle the leaf and one child node with right subtree 
-			return node.right ; 
-		else if (node.right  == null)  //handle one child node with left subtree 
-			return node.left;
-		else {                   //handle nodes with two children 
-			data = getPredecessor(node.left);
-			node.data = data;
-			node.left = recRemove(data, node.left);
-			return node;
-		}
-	}
-
-	/*
-	 * Returns the information held in the rightmost node of subtree
-	 *
-	 * @param subtree root of the subtree within which to search for the rightmost node
-	 * @return returns data stored in the rightmost node of subtree
-	 */
-	private RestStop getPredecessor(BSTNode subtree)
-	{
-		if (subtree==null) //this should not happen 
-			throw new NullPointerException("getPredecessor called with an empty subtree");
-		BSTNode temp = subtree;
-		while (temp.right  != null)
-			temp = temp.right ;
-		return temp.data;
+	public String toStringTree( ) {
+		StringBuffer buff = new StringBuffer(); 
+		toStringTree(buff, root, 0);
+		return buff.toString();
 	}
 
 
 	/**
-	 * Returns the number of elements in this tree.
-	 * @return the number of elements in this tree
+	 * This method uses preorder traversal to display the nodes
+	 * of the tree as Strings, provided that the data in each node
+	 * returns on one line when called with data.toString()
+	 * @param buff StringBuffer that creates modified String objects
+	 * which are appended to in order to properly format the display
+	 * @param node used to get data from each node of the tree
+	 * @param level used to keep track of each level of the tree
+	 * in order so preorder traversal can be returned
+	 * @author Joanna Klukowska
 	 */
-	public int size() {
-		//TO DO: implement this method 
-
-		return 0;
-	}
-
-
-	public String toStringTree( ) {
-		StringBuffer sb = new StringBuffer(); 
-		toStringTree(sb, root, 0);
-		return sb.toString();
-	}
-
-	//uses preorder traversal to display the tree 
-	//WARNING: will not work if the data.toString returns more than one line 
-	private void toStringTree( StringBuffer sb, BSTNode node, int level ) {
+	private void toStringTree( StringBuffer buff, BSTNode node, int level ) {
 		//display the node 
 		if (level > 0 ) {
 			for (int i = 0; i < level-1; i++) {
-				sb.append("   ");
+				buff.append(" ");
 			}
-			sb.append("|--");
+			buff.append(" ");
 		}
 		if (node == null) {
-			sb.append( "->\n"); 
+			buff.append( "\n"); 
 			return;
 		}
 		else {
-			sb.append( node.data + "\n"); 
+			buff.append( node.data + "\n"); 
 		}
 
-		//display the left subtree 
-		toStringTree(sb, node.left, level+1); 
-		//display the right subtree 
-		toStringTree(sb, node.right, level+1); 
-	}
-
-
-	/* 
-	 * Node class for this BST 
-	 */ 
-	private class BSTNode implements Comparable < BSTNode > {
-
-		RestStop data;
-		BSTNode  left;
-		BSTNode  right;
-
-		public BSTNode ( RestStop data ) {
-			this.data = data;
-		}
-
-		public BSTNode (RestStop data, BSTNode left, BSTNode right ) {
-			this.data = data;
-			this.left = left;
-			this.right = right;
-		}
-
-		public int compareTo ( BSTNode other ) {
-			if (BSTMountain.this.comparator == null )
-				return this.data.compareTo ( other.data );
-			else 
-				return comparator.compare(this.data, other.data); 
-		}
+		//display left subtree using recursive call 
+		toStringTree(buff, node.left, level+1); 
+		//display right subtree using recursive call
+		toStringTree(buff, node.right, level+1); 
 	}
 }
